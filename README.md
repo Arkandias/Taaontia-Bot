@@ -8,7 +8,7 @@ It will feature procedurally all that I had in mind but didn't quite found the m
 
 ## What does it use?
 
-It will be written in Python3, for fancy compatibility with Windows, Linux and (sadly?) OSX, using the libraries some cool developpers have made for this purpose.
+It will be written in Python3, for fancy compatibility with Windows, Linux and (sadly?) OSX, using the [library](https://github.com/Rapptz/discord.py) some cool developpers have made for this purpose.
 
 
 ## Cool, but what's with this name?
