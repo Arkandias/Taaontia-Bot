@@ -32,4 +32,5 @@ async def on_message(message):
 ##
 ##        await client.edit_message(tmp, 'You have {} messages.'.format(counter))
 
-client.run(token)
+if __name__ == '__main__':
+    client.run(token)
