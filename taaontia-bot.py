@@ -1,18 +1,30 @@
 import discord
 import asyncio
-from settings import token
+from settings import token, WELCOME_MESSAGE, CHANNEL
 from commands import commands
 
 client = discord.Client()
 
-botKey = '!tamer'
+botKey = '!t'
 
 @client.event
 async def on_ready():
     print('Logged in as')
     print(client.user.name)
     print(client.user.id)
+    print('Finding a server to say hello...')
+    channels = client.get_all_channels()
+    channel = None
+    for chan in channels:
+        if chan.name == CHANNEL:
+            channel = chan
+    if (channel is not None):
+        await client.send_message(channel, "Hello channel :).")
+        print ('... and sent hello to one :).')
+    else:
+        print ('... but couldn\'t find any :(.')
     print('------')
+
 
 @client.event
 async def on_message(message):
