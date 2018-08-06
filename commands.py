@@ -1,47 +1,64 @@
 class Command:
     __slots__ = (
         'helper',
-        'action'
+        'trigger',
+        'subCommand'
     )
-    pass
+    def __call__(self):
+        raise NotImplementedError()
 
+class CommandsRegistry:
+    def __init__(self):
+        self.commands = {}
+    def register(self, command):
+        self.commands[command.trigger] = command()
+        return command
+    def get(self, command):
+        return self.commands.get(command, HelpCommand())
+
+commands = CommandsRegistry()
+
+@commands.register
 class SuccessCommand(Command):
     helper = 'Try something.'
-    action = 'success'
+    trigger = 'success'
+    subCommand = CommandsRegistry()
     def __call__(event):
         return 'You successfully failed'
-    pass
 
+@commands.register
 class FailCommand(Command):
     helper = 'Try something.'
-    action = 'fail'
-    def __call__(event):
+    trigger = 'fail'
+    subCommand = CommandsRegistry()
+    def __call__(event, message):
         return 'You tried something. You failed'
-    pass
 
+@commands.register
 class TravelCommand(Command):
     helper = 'Try to move a bit .'
-    action = 'travel'
-    def __call__(event):
+    trigger = 'travel'
+    subCommand = CommandsRegistry()
+    def __call__(event, message):
         return 'You travel a bit to try to change your peevish, poor life. You failed.'
-    pass
 
+@commands.register
 class DungeonCommand(Command):
     helper = 'Try to explore a dungeon.'
-    action = 'dungeon'
-    def __call__(event):
+    trigger = 'dungeon'
+    subCommand = CommandsRegistry()
+    def __call__(event, message):
         return 'A latex-covered dominatrix comes to you with a leather whip. You undestand that\'s not the kind of dungeon you want to explore.'
-    pass
 
-class HelperCommand(Command):
+@commands.register
+class HelpCommand(Command):
     helper = 'Show this help.'
-    action = 'helper'
-    def __call__(event):
+    trigger = 'help'
+    subCommand = CommandsRegistry()
+    def __call__(event, message):
         ret = "```"
-        for command in Command.__subclasses__():
-            ret += '{} - {}\n'.format(command.action, command.helper)
-        return ret + '```';
-    pass    
-
-
-commands = {command.action: command() for command in Command.__subclasses__()}
+        for commandKey, command in commands.commands.items():
+            ret += '{} - {}\n'.format(command.trigger, command.helper)
+            for subCommandKey, subCommand in command.subCommand.commands.items():
+                ret += '\t{} - {}\n'.format(subCommand.trigger, subCommand.helper)
+        return ret + '```'
