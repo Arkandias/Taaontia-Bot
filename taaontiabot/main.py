@@ -33,6 +33,9 @@ async def on_message(message):
         if len(parsed_message) > 1:
             await client.send_message(message.channel, commands.get(parsed_message[1])(message))
 
+from dbmanagement import setup_db
+from models import *
 
 if __name__ == '__main__':
-    client.run(token)
+    setup_db()
+    # client.run(token)
