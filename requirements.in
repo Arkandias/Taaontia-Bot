@@ -1,3 +1,7 @@
 aiohttp
+django
+djangorestframework
+django-filters
 discord.py
+markdown
 sqlalchemy
